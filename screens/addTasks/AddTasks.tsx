@@ -1,10 +1,10 @@
-import { Box } from 'native-base'
+import { Box, Text } from 'native-base'
 import React from 'react'
 
 export default function AddTasks() {
   return (
-    <Box>
-      
+    <Box safeArea bg={'primary.600'} flex={1}>
+       <Text>add task </Text>
     </Box>
   )
 }
