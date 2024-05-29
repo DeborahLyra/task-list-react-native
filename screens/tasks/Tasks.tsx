@@ -5,6 +5,7 @@ import { TaskItems } from '../tasksItems/TaskItems';
 
 export default function Tasks() {
   const tasks = useTasksStore(state => state.tasks);
+  const removeTask = useTasksStore(state => state.removeTask);
 
   console.log(tasks);
 
@@ -19,6 +20,7 @@ export default function Tasks() {
             <TaskItems
               title={item.title}
               description={item.description}
+              onDelete={() => removeTask(item.id)}
             />
           )}
           showsHorizontalScrollIndicator={false}
@@ -29,7 +31,6 @@ export default function Tasks() {
             </Box>
           )}
         />
-
       </Box>
     </Box>
   );
