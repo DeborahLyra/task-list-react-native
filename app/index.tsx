@@ -8,6 +8,7 @@ import Tasks from "@/screens/tasks/Tasks";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import InProgressTasks from '@/screens/inProgressTasks/InProgressTasks';
+import DoneTasks from '@/screens/doneTasks/DoneTasks';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +53,7 @@ export default function Index() {
 
           <Tab.Screen
             name="doneTasks"
-            component={Tasks}
+            component={DoneTasks}
             options={{
               headerShown: false,
               tabBarLabel: 'Done',
