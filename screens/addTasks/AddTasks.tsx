@@ -6,15 +6,24 @@ import { useTasksStore } from '@/TaskStore';
 import { useNavigation } from 'expo-router';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
+
+const stepSchema = yup
+  .string()
+  .matches(
+    /^(toDO|inProgress|done)$/,
+    'Step must be one of the following values: toDO, inProgress, done'
+  );
+
 const validationSchema = yup.object().shape({
     title: yup.string()
-        .min(2, 'Title must be at least 2 characters')
-        .max(24, 'Title cannot be longer than 24 characters')
+        .min(4, 'Title must be at least 4 characters')
+        .max(64, 'Title cannot be longer than 64 characters')
         .required('Title is required'),
     description: yup.string()
         .min(8, 'Description must be at least 8 characters')
-        .max(60, 'Description cannot be longer than 60 characters')
+        .max(128, 'Description cannot be longer than 128 characters')
         .required('Description is required'),
+    step: stepSchema,
 });
 
 export default function AddTasks() {
@@ -31,7 +40,7 @@ export default function AddTasks() {
                 <Heading color='#27272a' mb={10}>Add a new task </Heading>
 
                 <Formik
-                    initialValues={{ title: '', description: '' }}
+                    initialValues={{ title: '', description: '', step:'toDo' }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
                         addTask(values.title, values.description);

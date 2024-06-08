@@ -3,16 +3,14 @@ import React from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
 
-export default function Tasks() {
+export default function InProgressTasks() {
   const tasks = useTasksStore(state => state.tasks);
   const removeTask = useTasksStore(state => state.removeTask);
 
-  console.log(tasks);
-
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
-      <Heading color='#27272a' mb={5}>To Do List</Heading>
-      <Text mb={5} bold>Press play when you start the task</Text>
+      <Heading color='#27272a' mb={5}>In Progress Tasks</Heading>
+      <Text mb={5} bold>Press check when you are done</Text>
       <Box>
         <FlatList
           data={tasks}
@@ -22,7 +20,7 @@ export default function Tasks() {
               title={item.title}
               description={item.description}
               onDelete={() => removeTask(item.id)}
-              iconName='play'
+              iconName='checkmark-done'
             />
           )}
           showsHorizontalScrollIndicator={false}

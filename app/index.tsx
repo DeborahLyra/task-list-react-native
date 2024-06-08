@@ -7,6 +7,7 @@ import AddTasks from "@/screens/addTasks/AddTasks";
 import Tasks from "@/screens/tasks/Tasks";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import InProgressTasks from '@/screens/inProgressTasks/InProgressTasks';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,13 +39,13 @@ export default function Index() {
             }}
           />
           <Tab.Screen
-            name="toDoTasks"
-            component={Tasks}
+            name="inProgressTasks"
+            component={InProgressTasks}
             options={{
               headerShown: false,
               tabBarLabel: 'In Progress',
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="alert" size={size} color={color} />
+                <Ionicons name="play" size={size} color={color} />
               )
             }}
           />
