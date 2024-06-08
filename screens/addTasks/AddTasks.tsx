@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, FormControl, Heading, Input, TextArea, VStack } from 'native-base';
+import { Box, Button, FormControl, Heading, Input, TextArea, Toast, VStack, useToast } from 'native-base';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useTasksStore } from '@/TaskStore';
@@ -20,7 +20,7 @@ const validationSchema = yup.object().shape({
 export default function AddTasks() {
     const navigation = useNavigation();
     const addTask = useTasksStore(state => state.addTask);
-
+    const toast = useToast();
     const handlePressOutside = () => {
         Keyboard.dismiss();
     };
@@ -36,7 +36,10 @@ export default function AddTasks() {
                     onSubmit={(values, actions) => {
                         addTask(values.title, values.description);
                         actions.resetForm();
-                        alert("Task added successfully");
+                       toast.show({
+                        description: "Task added successfully",
+                        variant: "outline",
+                      });
                     }}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (

@@ -15,25 +15,48 @@ export default function Index() {
     <NativeBaseProvider>
       <NavigationContainer independent={true}>
         <Tab.Navigator>
-        <Tab.Screen 
-            name="add-tasks" 
-            component={AddTasks} 
-            options={{ 
-              headerShown: false, 
+          <Tab.Screen
+            name="add-tasks"
+            component={AddTasks}
+            options={{
+              headerShown: false,
               tabBarLabel: 'Add Tasks',
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="add-circle-outline" size={size} color={color} />
               )
             }}
           />
-          <Tab.Screen 
-            name="tasks" 
-            component={Tasks} 
-            options={{ 
-              headerShown: false, 
+          <Tab.Screen
+            name="tasks"
+            component={Tasks}
+            options={{
+              headerShown: false,
               tabBarLabel: 'Tasks',
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="list-outline" size={size} color={color} />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="toDoTasks"
+            component={Tasks}
+            options={{
+              headerShown: false,
+              tabBarLabel: 'In Progress',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="alert" size={size} color={color} />
+              )
+            }}
+          />
+
+          <Tab.Screen
+            name="doneTasks"
+            component={Tasks}
+            options={{
+              headerShown: false,
+              tabBarLabel: 'Done',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="checkmark-done" size={size} color={color} />
               )
             }}
           />
