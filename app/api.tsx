@@ -2,5 +2,6 @@ import axios from 'axios';
 export { AxiosError } from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://veiopads.netlify.app/api/deborah-lyra/'
+  baseURL: 'https://veiopads.netlify.app/api/deborah-lyra'
 });
+

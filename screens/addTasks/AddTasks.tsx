@@ -8,11 +8,11 @@ import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 
 const stepSchema = yup
-  .string()
-  .matches(
-    /^(toDO|inProgress|done)$/,
-    'Step must be one of the following values: toDO, inProgress, done'
-  );
+.string()
+.matches(
+  /Para fazer|Em andamento|Pronto/,
+  'Os passos devem ser "Para fazer", "Em andamento" ou "Pronto"'
+);
 
 const validationSchema = yup.object().shape({
     title: yup.string()
@@ -40,7 +40,7 @@ export default function AddTasks() {
                 <Heading color='#27272a' mb={10}>Add a new task </Heading>
 
                 <Formik
-                    initialValues={{ title: '', description: '', step:'toDo' }}
+                    initialValues={{ title: '', description: '', step:'Para fazer' }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
                         addTask(values.title, values.description);

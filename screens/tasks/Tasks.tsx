@@ -1,14 +1,29 @@
 import { Box, FlatList, Heading, Text } from 'native-base';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
+import { api } from '@/app/api';
+
+type Item = {
+  id: string,
+  title: string,
+  description: string,
+  step: string
+}
 
 export default function Tasks() {
   const tasks = useTasksStore(state => state.tasks);
+  const setTasks = useTasksStore(state => state.setTasks);
   const removeTask = useTasksStore(state => state.removeTask);
+  const getTasks = useTasksStore(state => state.getTasks);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  console.log(tasks);
+  useEffect(() => {
+    getTasks()
+  }, [tasks]);
 
+  console.log('oi')
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>To Do List</Heading>
