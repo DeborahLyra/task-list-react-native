@@ -21,9 +21,9 @@ export default function Tasks() {
 
   useEffect(() => {
     getTasks()
+    console.log(tasks)
   }, [tasks]);
 
-  console.log('oi')
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>To Do List</Heading>
@@ -31,12 +31,11 @@ export default function Tasks() {
       <Box>
         <FlatList
           data={tasks}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()} 
           renderItem={({ item }) => (
             <TaskItems
               title={item.title}
               description={item.description}
-              onDelete={() => removeTask(item.id)}
               iconName='play'
             />
           )}

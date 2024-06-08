@@ -1,34 +1,44 @@
 import create from 'zustand';
 import 'react-native-get-random-values';
-import { nanoid } from 'nanoid/non-secure';
+//import { nanoid } from 'nanoid/non-secure';
 import { api } from './app/api';
 
 
 type Item = {
-    id: string,
-    title: string,
-    description: string,
-    step: string
+  id: number,
+  title: string,
+  description: string,
+  step: string, 
+
 }
 
 type TaskStore = {
   tasks: Item[],
-  addTask: (title: string, description: string) => void,
-  removeTask: (id: string) => void,
+  addTask: (title: string, description: string, step: string) => void,
+  removeTask: (id: number) => void,
   setTasks: (tasks: Item[]) => void,
   getTasks: () => void,
 }
 
 export const useTasksStore = create<TaskStore>((set) => ({
   tasks: [],
-  addTask: (title, description) => set(state => ({
-      tasks: [...state.tasks, { id: nanoid(), title, description, step: 'Para fazer' }]
-  })),
+  addTask: async (title, description, step) => {
+    const newTask = { title, description, step };
+    try {
+      const response = await api.post('/tasks', newTask); //faz o post, para o id seja gerado, depois que passa para uma const e add ela no []
+      const addedTask = response.data; 
+      set(state => ({
+        tasks: [...state.tasks, addedTask]
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  },
   removeTask: (id) => set(state => ({
-      tasks: state.tasks.filter(task => task.id !== id)
+    tasks: state.tasks.filter(task => task.id !== id)
   })),
   setTasks: (tasks) => set(() => ({
-      tasks: tasks
+    tasks: tasks
   })),
 
   getTasks: async () => {

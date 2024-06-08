@@ -42,14 +42,22 @@ export default function AddTasks() {
                 <Formik
                     initialValues={{ title: '', description: '', step:'Para fazer' }}
                     validationSchema={validationSchema}
-                    onSubmit={(values, actions) => {
-                        addTask(values.title, values.description);
-                        actions.resetForm();
-                       toast.show({
-                        description: "Task added successfully",
-                        variant: "outline",
-                      });
-                    }}
+                    onSubmit={async (values, actions) => {
+                        try {
+                            await addTask(values.title, values.description, values.step); // Passando 'step' aqui
+                            
+                            actions.resetForm();
+                            toast.show({
+                              description: "Task added successfully",
+                              placement: "top"
+                            });
+                          } catch (error) {
+                            toast.show({
+                              description: "Failed to add task",
+                              placement: "top"
+                            });
+                          }
+                        }}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                         <VStack space={4} bg='info.300' p={2} pb={6} borderRadius={5} >
