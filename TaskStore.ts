@@ -34,9 +34,17 @@ export const useTasksStore = create<TaskStore>((set) => ({
       console.error(error);
     }
   },
-  removeTask: (id) => set(state => ({
-    tasks: state.tasks.filter(task => task.id !== id)
-  })),
+  removeTask: async (id) => {
+    try {
+      await api.delete(`/tasks/${id}`);
+      console.log("delete")
+      set(state => ({
+        tasks: state.tasks.filter(task => task.id !== id)
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  },
   setTasks: (tasks) => set(() => ({
     tasks: tasks
   })),

@@ -7,10 +7,12 @@ type IoniconsName = keyof typeof Ionicons.glyphMap;
 interface TaskItemsProps {
     title: string,
     description: string,
-    iconName: IoniconsName
+    iconName: IoniconsName,
+    onRemove: (id: number) => void,
+    id: number
 }
 
-export function TaskItems({ title, description, iconName }: TaskItemsProps) {
+export function TaskItems({ title, description, iconName, onRemove, id }: TaskItemsProps) {
     return (
         <Box bg='info.300' w={'100%'} minWidth={300} p={2} borderRadius={5}>
             <HStack justifyContent="space-between" alignItems="center" bg='info.200' p={2}>
@@ -28,7 +30,7 @@ export function TaskItems({ title, description, iconName }: TaskItemsProps) {
                     />
                     <IconButton
                         p={1}
-                        
+                        onPress={() => onRemove(id)}
                         icon={<Ionicons name="trash" size={20} color="#be123c" />}
                     />
                 </Flex>

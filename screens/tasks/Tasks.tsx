@@ -21,8 +21,15 @@ export default function Tasks() {
 
   useEffect(() => {
     getTasks()
-    console.log(tasks)
   }, [tasks]);
+
+  const handleRemoveTask = async (id: number) => {
+    try {
+      await removeTask(id);
+    } catch (error) {
+      console.error('Failed to remove task', error);
+    }
+  };
 
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
@@ -37,6 +44,8 @@ export default function Tasks() {
               title={item.title}
               description={item.description}
               iconName='play'
+              onRemove={handleRemoveTask}
+              id={item.id}
             />
           )}
           showsHorizontalScrollIndicator={false}
