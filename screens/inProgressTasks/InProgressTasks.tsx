@@ -1,18 +1,19 @@
 import { Box, FlatList, Heading, Text } from 'native-base';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
+
+
 
 export default function InProgressTasks() {
   const tasks = useTasksStore(state => state.tasks);
   const removeTask = useTasksStore(state => state.removeTask);
-
-
+ 
   const handleRemoveTask = async (id: number) => {
     try {
       await removeTask(id);
     } catch (error) {
-      console.error('Failed to remove task', error);
+      console.error(error);
     }
   };
 

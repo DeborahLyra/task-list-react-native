@@ -2,10 +2,9 @@ import { Box, FlatList, Heading, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
-import { api } from '@/app/api';
 
 type Item = {
-  id: string,
+  id: number,
   title: string,
   description: string,
   step: string
@@ -13,6 +12,7 @@ type Item = {
 
 export default function Tasks() {
   const tasks = useTasksStore(state => state.tasks);
+  const [filteredTasks, setFilteredTasks] = useState<Item[]>([]);
   const setTasks = useTasksStore(state => state.setTasks);
   const removeTask = useTasksStore(state => state.removeTask);
   const getTasks = useTasksStore(state => state.getTasks);
@@ -21,6 +21,14 @@ export default function Tasks() {
 
   useEffect(() => {
     getTasks()
+  }, [tasks]);
+
+  useEffect(() => {
+    const filterTasks = () => {
+      const tasksToDo = tasks.filter(task => task.step === 'Para fazer');
+      setFilteredTasks(tasksToDo);
+    };
+    filterTasks();
   }, [tasks]);
 
   const handleRemoveTask = async (id: number) => {
@@ -37,7 +45,7 @@ export default function Tasks() {
       <Text mb={5} bold>Press play when you start the task</Text>
       <Box>
         <FlatList
-          data={tasks}
+          data={filteredTasks}
           keyExtractor={item => item.id.toString()} 
           renderItem={({ item }) => (
             <TaskItems
