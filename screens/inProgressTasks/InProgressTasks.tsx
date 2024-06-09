@@ -7,6 +7,15 @@ export default function InProgressTasks() {
   const tasks = useTasksStore(state => state.tasks);
   const removeTask = useTasksStore(state => state.removeTask);
 
+
+  const handleRemoveTask = async (id: number) => {
+    try {
+      await removeTask(id);
+    } catch (error) {
+      console.error('Failed to remove task', error);
+    }
+  };
+
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>In Progress Tasks</Heading>
@@ -14,13 +23,14 @@ export default function InProgressTasks() {
       <Box>
         <FlatList
           data={tasks}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()} 
           renderItem={({ item }) => (
             <TaskItems
               title={item.title}
               description={item.description}
-              onDelete={() => removeTask(item.id)}
+              onRemove={handleRemoveTask}
               iconName='checkmark-done'
+              id={item.id}
             />
           )}
           showsHorizontalScrollIndicator={false}
