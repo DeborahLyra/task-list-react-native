@@ -9,7 +9,6 @@ type Item = {
   title: string,
   description: string,
   step: string, 
-
 }
 
 type TaskStore = {
@@ -60,8 +59,7 @@ export const useTasksStore = create<TaskStore>((set) => ({
   getTasks: async () => {
     try {
       const response = await api.get<Item[]>('/tasks');
-      const filteredTasks = response.data.filter(task => task.step === "Para fazer");
-      set({ tasks: filteredTasks });
+      set({ tasks: response.data });
     } catch (error) {
       console.error('Failed to fetch tasks', error);
     }

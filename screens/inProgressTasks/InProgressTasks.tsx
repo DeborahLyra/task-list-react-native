@@ -17,25 +17,14 @@ export default function InProgressTasks() {
   const getTasks = useTasksStore(state => state.getTasks);
   const [inProgressTasks, setInProgressTasks] = useState<Item[]>([]);;
 
-  // useEffect(() => {
-  //   const fetchTasks = async () => {
-  //     try {
-  //       await getTasks();
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchTasks();
-  // }, [getTasks]);
-
-
-  // useEffect(() => {
-  //   console.log('tá pegando')
-  //   getTasks()
-  // }, [tasks]);
 
   useEffect(() => {
     getTasks()
+    
+  }, []);
+
+  useEffect(() => {
+    console.log(tasks)
     const filterInProgressTasks = () => {
       const filteredTasks = tasks.filter(task => task.step === 'Em andamento');
       setInProgressTasks(filteredTasks);
