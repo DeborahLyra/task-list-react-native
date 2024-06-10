@@ -12,9 +12,10 @@ interface TaskItemsProps {
     id: number,
     onPlay: (id: number) => void,
     step: string,
+    canUpdate: boolean
 }
 
-export function TaskItems({ title, description, iconName, onRemove, id, onPlay, step }: TaskItemsProps) {
+export function TaskItems({ title, description, iconName, onRemove, id, onPlay, step, canUpdate }: TaskItemsProps) {
     return (
         <Box bg='info.300' w={'100%'} minWidth={300} p={2} borderRadius={5}>
             <HStack justifyContent="space-between" alignItems="center" bg='info.200' p={2}>
@@ -25,11 +26,15 @@ export function TaskItems({ title, description, iconName, onRemove, id, onPlay, 
                         onPress={() => onPlay(id)}
                         icon={<Ionicons name={iconName} size={20} color="#21859c" />}
                     />
-                    <IconButton
+                   {
+                    canUpdate ? (
+                        <IconButton
                        
                         p={1}
                         icon={<Ionicons name="pencil" size={16} color="#21859c" />}
                     />
+                    ) : ""
+                   }
                     <IconButton
                         p={1}
                         onPress={() => onRemove(id)}

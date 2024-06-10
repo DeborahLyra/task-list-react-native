@@ -61,6 +61,8 @@ export default function DoneTasks() {
               id={item.id}
               iconName='happy'
               onPlay={handleTaskDone}
+              canUpdate={false}
+              step=''
             />
           )}
           showsHorizontalScrollIndicator={false}

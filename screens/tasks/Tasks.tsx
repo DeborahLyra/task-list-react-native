@@ -67,6 +67,7 @@ export default function Tasks() {
               id={item.id}
               onPlay={handlePlayTask}
               step={item.step}
+              canUpdate
             />
           )}
           showsHorizontalScrollIndicator={false}
