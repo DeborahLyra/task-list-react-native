@@ -15,7 +15,7 @@ export default function InProgressTasks() {
   const removeTask = useTasksStore(state => state.removeTask);
   const doneTask = useTasksStore(state => state.doneTask);
   const getTasks = useTasksStore(state => state.getTasks);
-  const [inProgressTasks, setInProgressTasks] = useState<Item[]>([]);;
+  const [inProgressTasks, setInProgressTasks] = useState<Item[]>([]);
 
   useEffect(() => {
     getTasks()
