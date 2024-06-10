@@ -81,7 +81,7 @@ export const useTasksStore = create<TaskStore>((set) => ({
   updateTask: async (id, title, description) => {
     try {
       const updatedTask = { title, description };
-      await api.patch(`/tasks/${id}`, updatedTask);
+      await api.put(`/tasks/${id}`, updatedTask);
       set(state => ({
         tasks: state.tasks.map(task =>
           task.id === id ? { ...task, title, description } : task

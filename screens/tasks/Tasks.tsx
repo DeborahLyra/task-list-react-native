@@ -2,6 +2,7 @@ import { Box, FlatList, Heading, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
+import { EditTaskModal } from '@/components/modal/Modal';
 
 
 type Item = {
@@ -18,6 +19,9 @@ export default function Tasks() {
   const getTasks = useTasksStore(state => state.getTasks);
   const playTask = useTasksStore(state => state.playTask);
   const updateTask = useTasksStore(state => state.updateTask);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState<Item | null>(null);
 
 
   useEffect(() => {
@@ -50,6 +54,21 @@ export default function Tasks() {
   };
 
 
+  const handleEditTask = (task: Item) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+};
+
+const handleUpdateTask = async (values: { id: number, title: string, description: string, step: string }) => {
+    try {
+        await updateTask(values.id, values.title, values.description, values.step);
+        setIsModalOpen(false);
+    } catch (error) {
+        console.error('Failed to update task', error);
+    }
+};
+
+
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>To Do List</Heading>
@@ -68,6 +87,7 @@ export default function Tasks() {
               onPlay={handlePlayTask}
               step={item.step}
               canUpdate
+              onEdit={handleEditTask}
             />
           )}
           showsHorizontalScrollIndicator={false}
@@ -79,7 +99,12 @@ export default function Tasks() {
           )}
         />
       </Box>
-    
+      <EditTaskModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                task={selectedTask}
+                onSubmit={handleUpdateTask}
+            />
     </Box>
   );
 }
