@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
 
+
 type Item = {
   id: number,
   title: string,
@@ -16,6 +17,8 @@ export default function Tasks() {
   const removeTask = useTasksStore(state => state.removeTask);
   const getTasks = useTasksStore(state => state.getTasks);
   const playTask = useTasksStore(state => state.playTask);
+  const updateTask = useTasksStore(state => state.updateTask);
+
 
   useEffect(() => {
     getTasks()
@@ -40,11 +43,12 @@ export default function Tasks() {
   const handlePlayTask = async (id: number) => {
     try {
       await playTask(id);
-      await getTasks(); 
+      await getTasks();
     } catch (error) {
       console.error(error);
     }
   };
+
 
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
@@ -53,7 +57,7 @@ export default function Tasks() {
       <Box flex={1}>
         <FlatList
           data={filteredTasks}
-          keyExtractor={item => item.id.toString()} 
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <TaskItems
               title={item.title}
@@ -62,6 +66,7 @@ export default function Tasks() {
               onRemove={handleRemoveTask}
               id={item.id}
               onPlay={handlePlayTask}
+              step={item.step}
             />
           )}
           showsHorizontalScrollIndicator={false}
@@ -73,6 +78,7 @@ export default function Tasks() {
           )}
         />
       </Box>
+    
     </Box>
   );
 }

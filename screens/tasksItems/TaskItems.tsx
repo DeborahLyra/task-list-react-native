@@ -11,9 +11,10 @@ interface TaskItemsProps {
     onRemove: (id: number) => void,
     id: number,
     onPlay: (id: number) => void,
+    step: string,
 }
 
-export function TaskItems({ title, description, iconName, onRemove, id, onPlay }: TaskItemsProps) {
+export function TaskItems({ title, description, iconName, onRemove, id, onPlay, step }: TaskItemsProps) {
     return (
         <Box bg='info.300' w={'100%'} minWidth={300} p={2} borderRadius={5}>
             <HStack justifyContent="space-between" alignItems="center" bg='info.200' p={2}>

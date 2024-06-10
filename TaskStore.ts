@@ -3,7 +3,6 @@ import 'react-native-get-random-values';
 //import { nanoid } from 'nanoid/non-secure';
 import { api } from './app/api';
 
-
 type Item = {
   id: number,
   title: string,
@@ -18,6 +17,7 @@ type TaskStore = {
   getTasks: () => void,
   playTask: (id: number) => void,
   doneTask: (id: number) => void,
+  updateTask: (id: number, title: string, descriprion: string, step: string) => void,
 }
 
 export const useTasksStore = create<TaskStore>((set) => ({
@@ -76,6 +76,19 @@ export const useTasksStore = create<TaskStore>((set) => ({
       set({ tasks: response.data });
     } catch (error) {
       console.error('Failed to fetch tasks', error);
+    }
+  },
+  updateTask: async (id, title, description) => {
+    try {
+      const updatedTask = { title, description };
+      await api.patch(`/tasks/${id}`, updatedTask);
+      set(state => ({
+        tasks: state.tasks.map(task =>
+          task.id === id ? { ...task, title, description } : task
+        )
+      }));
+    } catch (error) {
+      console.error(error);
     }
   },
 }));
