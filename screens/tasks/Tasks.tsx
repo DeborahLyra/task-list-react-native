@@ -19,10 +19,8 @@ export default function Tasks() {
   const getTasks = useTasksStore(state => state.getTasks);
   const playTask = useTasksStore(state => state.playTask);
   const updateTask = useTasksStore(state => state.updateTask);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedTask, setSelectedTask] = useState<Item | null>(null);
-
+  const [selectedTask, setSelectedTask] = useState<Item | null>(null);
 
   useEffect(() => {
     getTasks()
@@ -40,7 +38,7 @@ export default function Tasks() {
     try {
       await removeTask(id);
     } catch (error) {
-      console.error('Failed to remove task', error);
+      console.error(error);
     }
   };
 
@@ -53,21 +51,19 @@ export default function Tasks() {
     }
   };
 
-
   const handleEditTask = (task: Item) => {
     setSelectedTask(task);
     setIsModalOpen(true);
-};
+  };
 
-const handleUpdateTask = async (values: { id: number, title: string, description: string, step: string }) => {
+  const handleUpdateTask = async (values: { id: number, title: string, description: string, step: string }) => {
     try {
-        await updateTask(values.id, values.title, values.description, values.step);
-        setIsModalOpen(false);
+      await updateTask(values.id, values.title, values.description, values.step);
+      setIsModalOpen(false);
     } catch (error) {
-        console.error('Failed to update task', error);
+      console.error(error);
     }
-};
-
+  };
 
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
@@ -100,11 +96,11 @@ const handleUpdateTask = async (values: { id: number, title: string, description
         />
       </Box>
       <EditTaskModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                task={selectedTask}
-                onSubmit={handleUpdateTask}
-            />
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        task={selectedTask}
+        onSubmit={handleUpdateTask}
+      />
     </Box>
   );
 }

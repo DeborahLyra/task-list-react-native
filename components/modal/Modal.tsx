@@ -1,6 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, TextInput, Button, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+
+const stepSchema = yup
+    .string()
+    .matches(
+        /Para fazer|Em andamento|Pronto/,
+        'Os passos devem ser "Para fazer", "Em andamento" ou "Pronto"'
+    );
+
+const validationSchema = yup.object().shape({
+    title: yup.string()
+        .min(4, 'Title must be at least 4 characters')
+        .max(64, 'Title cannot be longer than 64 characters')
+        .required('Title is required'),
+    description: yup.string()
+        .min(8, 'Description must be at least 8 characters')
+        .max(128, 'Description cannot be longer than 128 characters')
+        .required('Description is required'),
+    step: stepSchema,
+});
 
 type EditTaskModalProps = {
     isOpen: boolean,
@@ -10,19 +31,11 @@ type EditTaskModalProps = {
 }
 
 export function EditTaskModal({ isOpen, onClose, task, onSubmit }: EditTaskModalProps) {
-    const [title, setTitle] = React.useState(task?.title || '');
-    const [description, setDescription] = React.useState(task?.description || '');
+    const initialValues = task ? { title: task.title, description: task.description } : { title: '', description: '' };
 
-    React.useEffect(() => {
+    const handleSave = async (values: any) => {
         if (task) {
-            setTitle(task.title);
-            setDescription(task.description);
-        }
-    }, [task]);
-
-    const handleSave = () => {
-        if (task) {
-            onSubmit({ id: task.id, title, description, step: task.step });
+            onSubmit({ id: task.id, ...values, step: task.step });
             onClose();
         }
     };
@@ -37,24 +50,41 @@ export function EditTaskModal({ isOpen, onClose, task, onSubmit }: EditTaskModal
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalTitle}>Edit Task</Text>
-                    <Text bold>Title:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Title"
-                        value={title}
-                        onChangeText={setTitle}
-                    />
-                    <Text bold>Description:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Description"
-                        value={description}
-                        onChangeText={setDescription}
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button title="Cancel" onPress={onClose} color="#be123c" />
-                        <Button title="Save" onPress={handleSave} color="#0ea5e9" />
-                    </View>
+                    {task && (
+                        <Formik
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={handleSave}
+                            enableReinitialize
+                        >
+                            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                                <>
+                                    <Text bold>Title:</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Title"
+                                        value={values.title}
+                                        onChangeText={handleChange('title')}
+                                        onBlur={handleBlur('title')}
+                                    />
+                                    {touched.title && errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
+                                    <Text bold>Description:</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Description"
+                                        value={values.description}
+                                        onChangeText={handleChange('description')}
+                                        onBlur={handleBlur('description')}
+                                    />
+                                    {touched.description && errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
+                                    <View style={styles.buttonContainer}>
+                                        <Button title="Cancel" onPress={onClose} color="#be123c" />
+                                        <Button title="Save" onPress={() => handleSubmit()} color="#0ea5e9" />
+                                    </View>
+                                </>
+                            )}
+                        </Formik>
+                    )}
                 </View>
             </View>
         </Modal>
@@ -92,7 +122,9 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        
-        
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 5,
     },
 });
