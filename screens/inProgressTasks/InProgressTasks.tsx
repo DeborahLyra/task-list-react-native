@@ -3,15 +3,59 @@ import React, { useEffect, useState } from 'react';
 import { useTasksStore } from '@/TaskStore';
 import { TaskItems } from '../tasksItems/TaskItems';
 
-
+type Item = {
+  id: number,
+  title: string,
+  description: string,
+  step: string
+}
 
 export default function InProgressTasks() {
   const tasks = useTasksStore(state => state.tasks);
   const removeTask = useTasksStore(state => state.removeTask);
- 
+  const playTask = useTasksStore(state => state.playTask);
+  const getTasks = useTasksStore(state => state.getTasks);
+  const [inProgressTasks, setInProgressTasks] = useState<Item[]>([]);;
+
+  // useEffect(() => {
+  //   const fetchTasks = async () => {
+  //     try {
+  //       await getTasks();
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchTasks();
+  // }, [getTasks]);
+
+
+  // useEffect(() => {
+  //   console.log('tá pegando')
+  //   getTasks()
+  // }, [tasks]);
+
+  useEffect(() => {
+    getTasks()
+    const filterInProgressTasks = () => {
+      const filteredTasks = tasks.filter(task => task.step === 'Em andamento');
+      setInProgressTasks(filteredTasks);
+    };
+    filterInProgressTasks();
+  }, [tasks]);
+
   const handleRemoveTask = async (id: number) => {
     try {
       await removeTask(id);
+      await getTasks(); 
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlePlayTask = async (id: number) => {
+    try {
+      await playTask(id);
+      await getTasks(); 
     } catch (error) {
       console.error(error);
     }
@@ -23,15 +67,16 @@ export default function InProgressTasks() {
       <Text mb={5} bold>Press check when you are done</Text>
       <Box>
         <FlatList
-          data={tasks}
-          keyExtractor={item => item.id.toString()} 
+          data={inProgressTasks}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <TaskItems
+              id={item.id}
               title={item.title}
               description={item.description}
               onRemove={handleRemoveTask}
+              onPlay={handlePlayTask}
               iconName='checkmark-done'
-              id={item.id}
             />
           )}
           showsHorizontalScrollIndicator={false}

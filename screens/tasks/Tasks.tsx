@@ -13,11 +13,9 @@ type Item = {
 export default function Tasks() {
   const tasks = useTasksStore(state => state.tasks);
   const [filteredTasks, setFilteredTasks] = useState<Item[]>([]);
-  const setTasks = useTasksStore(state => state.setTasks);
   const removeTask = useTasksStore(state => state.removeTask);
   const getTasks = useTasksStore(state => state.getTasks);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const playTask = useTasksStore(state => state.playTask);
 
   useEffect(() => {
     getTasks()
@@ -39,11 +37,20 @@ export default function Tasks() {
     }
   };
 
+  const handlePlayTask = async (id: number) => {
+    try {
+      await playTask(id);
+      await getTasks(); 
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>To Do List</Heading>
       <Text mb={5} bold>Press play when you start the task</Text>
-      <Box>
+      <Box flex={1}>
         <FlatList
           data={filteredTasks}
           keyExtractor={item => item.id.toString()} 
@@ -54,6 +61,7 @@ export default function Tasks() {
               iconName='play'
               onRemove={handleRemoveTask}
               id={item.id}
+              onPlay={handlePlayTask}
             />
           )}
           showsHorizontalScrollIndicator={false}
