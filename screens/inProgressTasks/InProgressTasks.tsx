@@ -13,18 +13,15 @@ type Item = {
 export default function InProgressTasks() {
   const tasks = useTasksStore(state => state.tasks);
   const removeTask = useTasksStore(state => state.removeTask);
-  const playTask = useTasksStore(state => state.playTask);
+  const doneTask = useTasksStore(state => state.doneTask);
   const getTasks = useTasksStore(state => state.getTasks);
   const [inProgressTasks, setInProgressTasks] = useState<Item[]>([]);;
 
-
   useEffect(() => {
     getTasks()
-    
   }, []);
 
   useEffect(() => {
-    console.log(tasks)
     const filterInProgressTasks = () => {
       const filteredTasks = tasks.filter(task => task.step === 'Em andamento');
       setInProgressTasks(filteredTasks);
@@ -41,9 +38,9 @@ export default function InProgressTasks() {
     }
   };
 
-  const handlePlayTask = async (id: number) => {
+  const handleDoneTask = async (id: number) => {
     try {
-      await playTask(id);
+      await doneTask(id);
       await getTasks(); 
     } catch (error) {
       console.error(error);
@@ -54,7 +51,7 @@ export default function InProgressTasks() {
     <Box safeArea bg={'info.500'} flex={1} alignItems='center' pt={16}>
       <Heading color='#27272a' mb={5}>In Progress Tasks</Heading>
       <Text mb={5} bold>Press check when you are done</Text>
-      <Box>
+      <Box flex={1}>
         <FlatList
           data={inProgressTasks}
           keyExtractor={item => item.id.toString()}
@@ -64,7 +61,7 @@ export default function InProgressTasks() {
               title={item.title}
               description={item.description}
               onRemove={handleRemoveTask}
-              onPlay={handlePlayTask}
+              onPlay={handleDoneTask}
               iconName='checkmark-done'
             />
           )}

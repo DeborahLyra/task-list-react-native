@@ -17,6 +17,7 @@ type TaskStore = {
   removeTask: (id: number) => void,
   getTasks: () => void,
   playTask: (id: number) => void,
+  doneTask: (id: number) => void,
 }
 
 export const useTasksStore = create<TaskStore>((set) => ({
@@ -53,7 +54,20 @@ export const useTasksStore = create<TaskStore>((set) => ({
         )
       }));
     } catch (error) {
-      console.error('Failed to update task step', error);
+      console.error( error);
+    }
+  },
+  doneTask: async (id) => {
+    try {
+      const taskUpdate = { step: 'Pronto' };
+      const response = await api.patch(`/tasks/${id}/update-step`, taskUpdate);
+      set(state => ({
+        tasks: state.tasks.map(task => 
+          task.id === id ? { ...task, step: 'Pronto' } : task
+        )
+      }));
+    } catch (error) {
+      console.error(error);
     }
   },
   getTasks: async () => {
