@@ -64,7 +64,7 @@ export default function DoneTasks() {
         <Text mb={5} bold>Check out the tasks you already completed</Text>
         <Box flex={1}>
           <FlatList
-            data={tasks}
+            data={doneTasks}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
               <TaskItems
