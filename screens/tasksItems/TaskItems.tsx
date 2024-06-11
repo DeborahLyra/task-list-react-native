@@ -13,7 +13,7 @@ interface TaskItemsProps {
     onPlay: (id: number) => void,
     step: string,
     canUpdate: boolean,
-    onEdit: (task: { id: number, title: string, description: string, step: string }) => void
+    onEdit: (task: { id: number, title: string, description: string, step: string }) => void 
 }
 
 export function TaskItems({ title, description, iconName, onRemove, id, onPlay, step, canUpdate, onEdit }: TaskItemsProps) {
